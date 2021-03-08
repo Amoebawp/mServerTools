@@ -1,0 +1,19 @@
+{
+    "Lua.diagnostics.globals": [
+        "g_Debug",
+        "NULL_ENTITY",
+        "RELIABLE_ORDERED",
+        "POST_ATTACH",
+        "STRING",
+        "ENTITYID",
+        "INT16",
+        "Net",
+        "ISM"
+    ],
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+        "unused-local",
+        "undefined-doc-name",
+        "undefined-doc-param"
+    ]
+}
