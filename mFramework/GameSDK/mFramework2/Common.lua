@@ -1,5 +1,28 @@
 DIR_SEPERATOR = _G['package'].config:sub(1, 1)
 
+---* Return the Size of a Table.
+-- Works with non Indexed Tables
+--- @param table table  `any table to get the size of`
+--- @return number      `size of the table`
+function table.size(table)
+    local n = 0
+    for k, v in pairs(table) do n = n + 1 end
+    return n
+end
+
+--- Return an array of keys of a table.
+---@param tbl table `The input table.`
+---@return table `The array of keys.`
+function table.keys(tbl)
+    local ks = {}
+    for k, _ in pairs(tbl) do table.insert(ks, k) end
+    return ks
+end
+
+if not table.pack then
+    table.pack = function(...) return {n = select('#', ...), ...} end
+end
+
 --- safely escape a given string
 ---@param str string    string to escape
 string.escape = function(str) return str:gsub('([%^%$%(%)%%%.%[%]%*%+%-%?])', '%%%1') end
@@ -44,25 +67,6 @@ end
 ---@return string `Hex Encoded String`
 function string.toHex(str)
     return (str:gsub('.', function(c) return string.format('%02X', string.byte(c)) end))
-end
-
----* Return the Size of a Table.
--- Works with non Indexed Tables
---- @param table table  `any table to get the size of`
---- @return number      `size of the table`
-function table.size(table)
-    local n = 0
-    for k, v in pairs(table) do n = n + 1 end
-    return n
-end
-
---- Return an array of keys of a table.
----@param tbl table `The input table.`
----@return table `The array of keys.`
-function table.keys(tbl)
-    local ks = {}
-    for k, _ in pairs(tbl) do table.insert(ks, k) end
-    return ks
 end
 
 --- expand a string containing any `${var}` or `$var`.
@@ -339,69 +343,6 @@ function Chain(...)
     return chain
 end
 
----* Serialise a Table and deseriase back again
----| supports basic functions
----@param t table|string
--- input table or string to serialise or deserialise
----@param parse boolean
--- set to true to Deserialise/Parse the provided string
----@return string|table output
--- serialised table as a string OR deserialised string as a table
-function SerialiseTable(t, parse)
-    local szt = {}
-
-    local function char(c) return ('\\%3d'):format(c:byte()) end
-    local function szstr(s) return ('"%s"'):format(s:gsub('[^ !#-~]', char)) end
-    local function szfun(f) return 'loadstring' .. szstr(string.dump(f)) end
-    local function szany(...) return szt[type(...)](...) end
-
-    local function sztbl(t, code, var)
-        for k, v in pairs(t) do
-            local ks = szany(k, code, var)
-            local vs = szany(v, code, var)
-            code[#code + 1] = ('%s[%s]=%s'):format(var[t], ks, vs)
-        end
-        return '{}'
-    end
-
-    local function memo(sz)
-        return function(d, code, var)
-            if var[d] == nil then
-                var[1] = var[1] + 1
-                var[d] = ('_[%d]'):format(var[1])
-                local index = #code + 1
-                code[index] = '' -- reserve place during recursion
-                code[index] = ('%s=%s'):format(var[d], sz(d, code, var))
-            end
-            return var[d]
-        end
-    end
-
-    szt['nil'] = tostring
-    szt['boolean'] = tostring
-    szt['number'] = tostring
-    szt['string'] = szstr
-    szt['function'] = memo(szfun)
-    szt['table'] = memo(sztbl)
-
-    function serialize(d)
-        local code = {'local _ = {}'}
-        local value = szany(d, code, {0})
-        code[#code + 1] = 'return ' .. value
-        if #code == 2 then
-            return code[2]
-        else
-            return table.concat(code, '\n')
-        end
-    end
-    if not parse then
-        return serialize(t)
-    else
-        local ret = loadstring(t)
-        if ret then return ret() end
-    end
-end
-
 ---* Used for Grabbing Data Logged to Console/Logfile from function `f` ,
 -- this only grabs the Data Logged During the provdided function call ,
 -- and returns Raw Log output.
@@ -606,4 +547,46 @@ function clone_function(fn)
         i = i + 1
     end
     return cloned
+end
+
+local function split_command(str, delimiter)
+    local result = {}
+    local from = 1
+    local delim = delimiter or ' '
+    local delim_from, delim_to = string.find(str, delim, from)
+    while delim_from do
+        table.insert(result, string.sub(str, from, delim_from - 1))
+        from = delim_to + 1
+        delim_from, delim_to = string.find(str, delim, from)
+    end
+    table.insert(result, string.sub(str, from))
+    return result
+end
+
+local function parse_kvargs(str)
+    local t = {}
+    -- note: currently only supports 3 spaces or 3 punctuation symbols in a value
+    for k, v in string.gmatch(str, '-(%w+)=(%w+%p?%s?%w+%p?%s?%w+)') do t[k] = v end
+    return t
+end
+
+parseCommand = function(command)
+    local parsed = {}
+    local command_parts = split_command(command)
+    if command_parts then
+        parsed.cmd = command_parts[1]
+        parsed.arg0 = command:gsub(command_parts[1], ''):gsub('^%s', '')
+        parsed.args = command_parts
+        table.remove(parsed.args,1)
+        parsed.kvargs = parse_kvargs(command)
+        ---HACK: cleanup any kvargs from args
+        for k in pairs(parsed['kvargs']) do
+            for i, value in ipairs(parsed['args']) do
+                if string.find(value, '-' .. k) then table.remove(parsed.args, i) end
+            end
+        end
+        return parsed
+    else
+        return command
+    end
 end
