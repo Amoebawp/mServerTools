@@ -63,5 +63,5 @@ end
 -- ─── EXPORTS ────────────────────────────────────────────────────────────────────
 --
 RegisterModule('mFramework2.Classes.DataStore', DataStore)
-g_mFramework.Classes.DataStore = DataStore
+g_mFramework.classes.DataStore = DataStore
 return DataStore

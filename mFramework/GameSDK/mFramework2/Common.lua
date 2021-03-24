@@ -19,6 +19,22 @@ function table.keys(tbl)
     return ks
 end
 
+
+---* Copies all the fields from the source into t and return .
+-- If a key exists in multiple tables the right-most table value is used.
+--- @param t table      table to update
+function table.update(t, ...)
+    for i = 1, select('#', ...) do
+        local x = select(i, ...)
+        if x then
+            for k, v in pairs(x) do
+                t[k] = v
+            end
+        end
+    end
+    return t
+end
+
 if not table.pack then
     table.pack = function(...) return {n = select('#', ...), ...} end
 end
@@ -203,8 +219,8 @@ function bind_getter(t, k)
 end
 
 ---* Create a function that sets the value of t[k] ,
----| The returned function is Bound to the Provided Table,Key ,
----| The argument passed to the returned function is used as the value to set.
+--- The returned function is Bound to the Provided Table,Key ,
+--- The argument passed to the returned function is used as the value to set.
 --- @param t table       table to access
 --- @param k table       key to set
 --- @return function     returned setter function
@@ -224,7 +240,7 @@ function bind_setter(t, k)
 end
 
 ---* Create a function that returns the value of t[k] ,
----| The argument passed to the returned function is used as the Key.
+--- The argument passed to the returned function is used as the Key.
 --- @param t table       table to access
 --- @return function     returned getter function
 function getter(t)
@@ -238,7 +254,7 @@ function getter(t)
 end
 
 ---* Create a function that sets the value of t[k] ,
----| The argument passed to the returned function is used as the Key.
+--- The argument passed to the returned function is used as the Key.
 --- @param t table       table to access
 --- @return function     returned setter function
 function setter(t)
@@ -393,10 +409,10 @@ end
 
 ---@alias UUID string UniqueID
 --- Generate a new UUID
----| using an improved randomseed function accouning for lua 5.1 vm limitations
----| Lua 5.1 has a limitation on the bitsize meaning that when using randomseed
----| numbers over the limit get truncated or set to 1 , destroying all randomness for the run
----| uses an assumed Lua 5.1 maximim bitsize of 32.
+--- using an improved randomseed function accouning for lua 5.1 vm limitations
+--- Lua 5.1 has a limitation on the bitsize meaning that when using randomseed
+--- numbers over the limit get truncated or set to 1 , destroying all randomness for the run
+--- uses an assumed Lua 5.1 maximim bitsize of 32.
 ---@return UUID, string
 function UUID()
     local bitsize = 32

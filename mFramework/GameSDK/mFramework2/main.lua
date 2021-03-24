@@ -1,7 +1,7 @@
 local DataStore = require('mFramework2.Classes.DataStore')
 
---- Create mFramework Public interface
-local function CreatePublicInterface()
+--- Load mFramework Core
+local function Load_mFrameowrk_Core()
     --- mFramework Public class
     ---@class mFramework
     ---@field state table `Current State of this mFramework Instance`
@@ -37,13 +37,12 @@ local function CreateStandardInterface()
     function mFramework2:Init(init_time)
         -- setup CustomEntity Support
         Script.ReloadScript(FS.joinPath(self.BASEDIR, 'CustomEntity.lua'))
+        -- Setup our CustomPlayer
+        Script.ReloadScript(FS.joinPath(self.BASEDIR, 'CustomPlayer.lua'))
         -- Load CustomEntities
         Script.LoadScriptFolder('Scripts/CustomEntities')
         -- >> in editor we need to ReExpose Registered CustomEntities extra early else stuff wont work properly
         if System.IsEditor() then ReExposeAllRegistered() end
-
-        -- Setup our CustomPlayer
-        Script.ReloadScript(FS.joinPath(self.BASEDIR, 'CustomPlayer.lua'))
 
         -- save init time
         self.state['initialised'] = init_time
@@ -56,10 +55,10 @@ local function CreateStandardInterface()
 
     -- Register Start Callback
     function mFramework2:Start(start_time)
+        ReExposeAllRegistered()
+        Script.LoadScriptFolder("mFramework2/Plugins")
         -- save start time
         self.state['started'] = start_time
-        Script.ReloadScript(FS.joinPath(self.BASEDIR, 'Scripts', 'OnStartup.lua'))
-        ReExposeAllRegistered()
         self.Events:emit('mFramework2:OnAllLoaded', {started = start_time})
         mFramework2.Log('mFramework', 'mFramework Started...')
     end
@@ -69,8 +68,8 @@ local function CreateStandardInterface()
 end
 
 local function init()
-    if (not CreatePublicInterface()) then
-        LogError('mFramework2:main failed @ stage: CreatePublicInterface()')
+    if (not Load_mFrameowrk_Core()) then
+        LogError('mFramework2:main failed @ stage: Load mFramework Core')
         return
     end
     if (not CreateStandardEvents()) then
@@ -78,7 +77,7 @@ local function init()
         return
     end
     if (not CreateStandardInterface()) then
-        LogError('mFramework2: init failed @ stage: CreateStandardInterface()')
+        LogError('mFramework2: init failed @ stage: CreateStandardInterface')
         return
     end
     ---TODO: Improve logging

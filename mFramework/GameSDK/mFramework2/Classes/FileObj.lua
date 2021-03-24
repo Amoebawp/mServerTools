@@ -1,5 +1,5 @@
 --- Create a empty table for our file Object
-local fileObj
+local fileObj = {}
 
 function fileObj:new(file_path) self.path = file_path end
 

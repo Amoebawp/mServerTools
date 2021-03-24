@@ -13,11 +13,11 @@ function Classy:Create(name, base)
             end,
         },
         __type = 'Object',
-        __tostring = function(self) return getmetatable(self).__type end,
-        __call = function(self, ...)
-            local obj = setmetatable({}, {__index = self})
-            if self['super'] and self.super['new'] then self.super.new(obj, ...) end
-            if self['new'] then self.new(obj, ...) end
+        __tostring = function(this) return getmetatable(this).__type end,
+        __call = function(this, ...)
+            local obj = setmetatable({}, {__index = this})
+            if this['super'] and this.super['new'] then this.super.new(obj, ...) end
+            if this['new'] then this.new(obj, ...) end
             return obj
         end,
     }

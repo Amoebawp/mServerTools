@@ -56,7 +56,11 @@ Usage:
 ---@field events table<string,function>
 ---@field callbacks table<string,function>
 ---@field silenced table<string,function>
-local events = {}
+local events = {
+    events = {},
+    callbacks = {},
+    silenced = {}
+}
 
 --- Create an event.
 function events:createEvent(event)

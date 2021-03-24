@@ -116,6 +116,8 @@ local function RecieveMultipart(player, transaction, data,cb)
     end
 end
 
+g_CustomPlayerEvents = {}
+
 function CustomPlayer:CustomEventHandler(event, source_Id, target_Id)
     -- process multipart events
     if event.type == "xMultipart" then
