@@ -45,8 +45,8 @@ local SetupConsoleHandler = function()
 
     --- RegisterScriptCommand
     ---comment
-    ---@param command   string                                              `command to register`
-    ---@param method    fun(commandData:table)boolean,string      `command method`
+    ---@param command   string                                      `command to register`
+    ---@param method    fun(commandData:table):boolean,string       `command method`
     ---@return boolean  `true if successfull or false`
     ---@return string   `error message`
     function RegisterScriptCommand(command, method)
@@ -80,16 +80,3 @@ local SetupConsoleHandler = function()
 end
 
 SetupConsoleHandler()
-
-Log("Register Eval command:")
-local eval_cmd = {}
-eval_cmd.created, eval_cmd.result = RegisterScriptCommand('eval', function(this)
-    local code = this.arg0
-    local runOk, result = eval_string(code)
-    if runOk then
-        return true, string.format('ExecLUA:OK > %s', (result or 'No Result'))
-    else
-        return false, string.format('ExecLua:ERROR > %s', (result or 'Unknown Error'))
-    end
-end)
-dump(eval_cmd)
