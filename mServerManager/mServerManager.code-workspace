@@ -1,0 +1,82 @@
+{
+	"folders": [
+		{
+			"name": "Workspace",
+			"path": "./App"
+		},
+		{
+			"name": "Documentation",
+			"path": "./Documentation"
+		}
+	],
+	"settings": {
+		"workbench.startupEditor": "readme",
+		"files.associations": {
+			"*.moon": "lua"
+		},
+		"editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
+		"editor.fontLigatures": true,
+		"editor.suggest.localityBonus": true,
+		"terminal.integrated.splitCwd": "workspaceRoot",
+		"better-comments.highlightPlainText": true,
+		"better-comments.tags": [
+			{
+				"tag": "!",
+				"color": "#FF2D00",
+				"strikethrough": false,
+				"backgroundColor": "transparent"
+			},
+			{
+				"tag": "?",
+				"color": "#3498DB",
+				"strikethrough": false,
+				"backgroundColor": "transparent"
+			},
+			{
+				"tag": "//",
+				"color": "#474747",
+				"strikethrough": true,
+				"backgroundColor": "transparent"
+			},
+			{
+				"tag": "todo",
+				"color": "#FF8C00",
+				"strikethrough": false,
+				"backgroundColor": "transparent"
+			},
+			{
+				"tag": ">>",
+				"color": "#aeaeae",
+				"strikethrough": false,
+				"backgroundColor": "transparent"
+			},
+			{
+				"tag": "*",
+				"color": "#98C379",
+				"strikethrough": false,
+				"backgroundColor": "transparent"
+			}
+		],
+		"liveServer.settings.multiRootWorkspaceName": "Documentation",
+		"Lua.completion.callSnippet": "Both",
+		"Lua.completion.keywordSnippet": "Both",
+		"lua.format.singleQuote": true,
+		"Lua.runtime.version": "Lua 5.1",
+		"Lua.workspace.library": {
+			"../libs": true
+		},
+		"Lua.diagnostics.enable": true,
+		"Lua.diagnostics.globals": []
+	},
+	"extensions": {
+		"recommendations": [
+			"aaron-bond.better-comments",
+			"bobmagicii.autofoldyeah",
+			"Gruntfuggly.todo-tree",
+			"sumneko.lua",
+			"koihik.vscode-lua-format",
+			"usernamehw.errorlens",
+
+		]
+	}
+}

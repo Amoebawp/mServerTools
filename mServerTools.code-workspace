@@ -78,16 +78,17 @@
 		],
 		"liveServer.settings.multiRootWorkspaceName": "Documentation",
 		"Lua.runtime.version": "Lua 5.1",
-		"Lua.workspace.library": {
-			"../.lua.compleations.d/": true
-		},
+		"Lua.workspace.library":[
+			"../.lua.compleations.d/"
+		],
 		"Lua.diagnostics.globals": [
 			"NULL_ENTITY",
 			"RELIABLE_ORDERED",
 			"POST_ATTACH",
 			"STRING",
 			"ENTITYID",
-			"INT16"
+			"INT16",
+			"Net"
 		],
 		"Lua.diagnostics.disable": [
 			"lowercase-global",
@@ -96,6 +97,17 @@
 			"undefined-doc-param"
 		],
 		"vscode-lua-format.configPath": "../lua-format.conf",
+		"Lua.workspace.preloadFileSize": 150,
+		"Lua.completion.callSnippet": "Both",
+		"Lua.hint.enable": true,
+		"Lua.runtime.builtin": {
+			"bit": "disable",
+			"bit32": "disable",
+			"utf8": "disable",
+			"ffi": "disable",
+			"jit": "disable"
+		},
+		"Lua.telemetry.enable": false,
 	},
 	"extensions": {
 		"recommendations": [

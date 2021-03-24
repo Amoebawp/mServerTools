@@ -1,0 +1,22 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Algernon Dev",
+            "type": "shell",
+            "windows": {
+                "command": "${workspaceFolder}/algernon.exe --dev --httponly --debug --autorefresh --conf ${workspaceFolder}/config/serverconf.lua --dir ${workspaceFolder}/public --boltdb=${workspaceFolder}/data/database.bolt"
+            },
+            "linux": {
+                "command": "algernon --dev --httponly --debug --autorefresh --conf ${workspaceFolder}/config/serverconf.lua --dir ${workspaceFolder}/public --boltdb=${workspaceFolder}/data/database.bolt"
+            }
+        },
+        {
+            "label": "Start Algernon Docker",
+            "type": "shell",
+            "command": "docker run -v ${workspaceFolder}/server:/srv/algernon -v ${workspaceFolder}/config:/etc/algernon --rm --publish 3000:3000 xyproto/algernon:dev"
+        }
+    ]
+}
