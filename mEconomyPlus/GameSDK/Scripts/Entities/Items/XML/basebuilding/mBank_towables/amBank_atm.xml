@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<item name="mBank_atm" class="BaseBuildingItem" category="any">
+  <params>
+    <param name="selectable" value="0" />
+    <param name="mass" value="-1" />
+    <param name="display_name" value="AmBits ATM" />
+    <param name="description" value="ATM for storage of AmcoinLedgers and Conversion to amBits" />
+  </params>
+  <geometry>
+    <thirdperson name="objects/props/atm/atm_tow.cgf" />
+  </geometry>
+  <storage>
+    <types>
+      <type category="amcoins" capacity="1"/>
+    </types>
+  </storage>
+</item>
